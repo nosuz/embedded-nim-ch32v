@@ -22,10 +22,13 @@ after build:
 task flash, "Flash firmware":
     case commandLineParams[^1]
     of "raw":
+        echo "writing blinky_raw"
         exec "wch-isp -r flash firmware/blinky_raw.bin"
     of "svd":
+        echo "writing blinky_svd"
         exec "wch-isp -r flash firmware/blinky_svd.bin"
     else:
+        echo "writing blinky_svd"
         exec "wch-isp -r flash firmware/blinky_svd.bin"
 
 task svd, "Convert SVD file":
