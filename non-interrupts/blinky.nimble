@@ -1,3 +1,5 @@
+import std/strformat
+
 # Package
 
 version       = "0.1.0"
@@ -13,23 +15,19 @@ binDir        = "firmware/"
 requires "nim >= 2.2.4"
 
 after build:
-    exec "riscv32-unknown-elf-objcopy -O binary firmware/blinky_raw firmware/blinky_raw.bin"
-    exec "riscv32-unknown-elf-objdump -d firmware/blinky_raw > firmware/blinky_raw.s"
+    for binary in bin:
+        exec fmt"riscv32-unknown-elf-objcopy -O binary {binDir}{binary} {binDir}{binary}.bin"
+        exec fmt"riscv32-unknown-elf-objdump -d {binDir}{binary} > {binDir}{binary}.s"
 
-    exec "riscv32-unknown-elf-objcopy -O binary firmware/blinky_svd firmware/blinky_svd.bin"
-    exec "riscv32-unknown-elf-objdump -d firmware/blinky_svd > firmware/blinky_svd.s"
+task flash, "Flash firmware. Usage: nimble flash [svd|raw]":
+    let binary = case commandLineParams[^1]
+    of "raw": "blinky_raw"
+    of "svd": "blinky_svd"
+    else: "blinky_svd"
 
-task flash, "Flash firmware":
-    case commandLineParams[^1]
-    of "raw":
-        echo "writing blinky_raw"
-        exec "wch-isp -r flash firmware/blinky_raw.bin"
-    of "svd":
-        echo "writing blinky_svd"
-        exec "wch-isp -r flash firmware/blinky_svd.bin"
-    else:
-        echo "writing blinky_svd"
-        exec "wch-isp -r flash firmware/blinky_svd.bin"
+    # echo fmt"writing {binary}"
+    echo "writing $1" % [binary]
+    exec fmt"wch-isp -r flash {binDir}{binary}.bin"
 
 task svd, "Convert SVD file":
     exec "cd src/svd && svd2nim ch32v20x.svd"
