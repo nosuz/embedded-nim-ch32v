@@ -29,10 +29,10 @@ copy_data_section:
     la a2, _edata_lma
     beq a1, a2, copy_data_done
 copy_data_loop:
-    lb t0, 0(a0)
-    sb t0, 0(a1)
-    addi a0, a0, 1
-    addi a1, a1, 1
+    lw t0, 0(a0)
+    sw t0, 0(a1)
+    addi a0, a0, 4
+    addi a1, a1, 4
     bltu a1, a2, copy_data_loop
 copy_data_done:
 
@@ -43,8 +43,8 @@ clear_bss_section:
     la t2, _ebss
     beq t1, t2, clear_bss_done
 clear_bss_loop:
-    sb t0, 0(t1)
-    addi t1, t1, 1
+    sw t0, 0(t1)
+    addi t1, t1, 4
     bne t1, t2, clear_bss_loop
 clear_bss_done:
 
