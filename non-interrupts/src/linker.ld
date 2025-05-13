@@ -66,6 +66,12 @@ SECTIONS
     *(.bss .bss.*);
     /* make sure the end of section is aligned by 4 bytes. */
     . = ALIGN(4);
+  } > REGION_BSS
+
+  .tbss (NOLOAD) :
+  {
+    *(.tbss .tbss.* .gnu.linkonce.tb.*);
+    . = ALIGN(4);
     _ebss = .;
   } > REGION_BSS
 
