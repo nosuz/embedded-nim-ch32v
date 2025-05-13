@@ -3,7 +3,7 @@
 # import svd file
 import svd/ch32v20xx
 
-proc port_init() {.inline.} =
+proc port_init() =
     # Enable PA clock
     RCC.APB2PCENR.modifyIt:
         it.IOPAEN = true
@@ -16,7 +16,7 @@ proc port_init() {.inline.} =
 #     GPIOA.OUTDR.modifyIt:
 #         it.ODR5 = s
 
-proc port_toggle() {.inline.} =
+proc port_toggle() =
     let pa5 = GPIOA.OUTDR.read().ODR5
     GPIOA.OUTDR.modifyIt:
         # it.ODR5 = if pa5: true else: false
