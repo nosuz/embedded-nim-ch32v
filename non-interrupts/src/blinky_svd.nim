@@ -25,8 +25,11 @@ proc port_toggle() =
 proc delay() =
     const delay = 1_000_000
     for _ in 0..delay:
+        # asm """
+        #     nop
+        # """
         asm """
-        nop
+            "" : : : "memory"
         """
 
 # proc main() {.noreturn.} =
