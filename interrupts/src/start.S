@@ -19,6 +19,11 @@ _start:
     // set stack pointer
     la sp, _stack_start
 
+    // INTSYSCR: enable Interrupt nesting + HPE and the configured interrupt nesting depth is 2.
+    // HPE (hardware stack): registers caller should save are stacked by hardware.
+    // ra, t0, t1, t2, t3, t4, t5, t6, a0, a1, a2, a3, a4, a5, a6, a7
+    csrsi 0x804, 0b0111
+
     // set interrupts trap vec.
     la      t0, interrupt_handler
     csrw    mtvec, t0
@@ -68,50 +73,6 @@ unhandled_handler:
 
 .section .handlers, "ax"
 interrupt_handler:
-    addi sp, sp, -16*REGBYTES
-
-    sw ra, 0*REGBYTES(sp)
-    sw t0, 1*REGBYTES(sp)
-    sw t1, 2*REGBYTES(sp)
-    sw t2, 3*REGBYTES(sp)
-    sw t3, 4*REGBYTES(sp)
-    sw t4, 5*REGBYTES(sp)
-    sw t5, 6*REGBYTES(sp)
-    sw t6, 7*REGBYTES(sp)
-    sw a0, 8*REGBYTES(sp)
-    sw a1, 9*REGBYTES(sp)
-    sw a2, 10*REGBYTES(sp)
-    sw a3, 11*REGBYTES(sp)
-    sw a4, 12*REGBYTES(sp)
-    sw a5, 13*REGBYTES(sp)
-    sw a6, 14*REGBYTES(sp)
-    sw a7, 15*REGBYTES(sp)
-
-    // set sp vale to a0 or the 1st. arg.
-    // add a0, sp, zero
-    // interrupts_handler(sp, mcause, mepc);
-    // csrr a1, mcause
-    // csrr a2, mepc
-    // interrupts_handler(mcause: u32);
     csrr a0, mcause
     jal ra, dispatchInterrupt
-
-    lw ra, 0*REGBYTES(sp)
-    lw t0, 1*REGBYTES(sp)
-    lw t1, 2*REGBYTES(sp)
-    lw t2, 3*REGBYTES(sp)
-    lw t3, 4*REGBYTES(sp)
-    lw t4, 5*REGBYTES(sp)
-    lw t5, 6*REGBYTES(sp)
-    lw t6, 7*REGBYTES(sp)
-    lw a0, 8*REGBYTES(sp)
-    lw a1, 9*REGBYTES(sp)
-    lw a2, 10*REGBYTES(sp)
-    lw a3, 11*REGBYTES(sp)
-    lw a4, 12*REGBYTES(sp)
-    lw a5, 13*REGBYTES(sp)
-    lw a6, 14*REGBYTES(sp)
-    lw a7, 15*REGBYTES(sp)
-
-    addi sp, sp, 16*REGBYTES
     mret
