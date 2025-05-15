@@ -1,29 +1,23 @@
-# define STORE    sw
-# define LOAD     lw
-# define LOG_REGBYTES 2
-#define REGBYTES (1 << LOG_REGBYTES)
-
-/* default entry point */
-
 .section .init, "ax"
+/* entry point */
 .global _start
 
 _start:
-    # CH32V103 starts from 0x0000_0004 but CH32V203 starts from 0x0000_0000.
+    // CH32V103 starts from 0x0000_0004 but CH32V203 starts from 0x0000_0000.
     nop
     nop
 
-    # set global pointer
+    // set global pointer
     .option push
     .option norelax
     la gp, __global_pointer$
     .option pop
 
-    # set stack pointer
+    // set stack pointer
     la sp, _stack_start
 
 copy_data_section:
-    # copy data section to RAM
+    // copy data section to RAM
     la a0, _sdata_lma
     la a1, _sdata
     la a2, _edata_lma
@@ -37,7 +31,7 @@ copy_data_loop:
 copy_data_done:
 
 clear_bss_section:
-    # clear bss section
+    // clear bss section
     li t0, 0
     la t1, _sbss
     la t2, _ebss
@@ -48,10 +42,10 @@ clear_bss_loop:
     bne t1, t2, clear_bss_loop
 clear_bss_done:
 
-    # Set frame pointer
+    // Set frame pointer
     add s0, sp, zero
 
-    # call nim routine
+    // call nim routine
     jal NimMain
 
 exited_loop:

@@ -1,4 +1,4 @@
-{.compile: "start.s"}
+{.compile: "start.S"}
 
 # import svd file
 import svd/ch32v20xx

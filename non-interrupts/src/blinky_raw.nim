@@ -1,4 +1,4 @@
-{.compile: "start.s"}
+{.compile: "start.S"}
 
 import std/volatile
 # import std/bitops
