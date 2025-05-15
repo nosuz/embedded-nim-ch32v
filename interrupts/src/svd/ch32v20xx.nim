@@ -53600,7 +53600,8 @@ proc write*(reg: PFIC_VTFADDRR0_Type, val: PFIC_VTFADDRR0_Fields) {.inline.} =
 proc write*(reg: PFIC_VTFADDRR0_Type, VTF0EN: bool = false, ADDR0: uint32 = 0) =
   var x: uint32
   x.setMask((VTF0EN.uint32 shl 0).masked(0 .. 0))
-  x.setMask((ADDR0 shl 1).masked(1 .. 31))
+  # x.setMask((ADDR0 shl 1).masked(1 .. 31))
+  x.setMask(ADDR0.masked(1 .. 31))
   reg.write x.PFIC_VTFADDRR0_Fields
 
 template modifyIt*(reg: PFIC_VTFADDRR0_Type, op: untyped): untyped =
@@ -58115,4 +58116,3 @@ proc `CNTIF=`*(r: var PFIC_STK_SR_Fields, val: bool) {.inline.} =
   tmp.clearMask(0 .. 0)
   tmp.setMask((val.uint32 shl 0).masked(0 .. 0))
   r = tmp.PFIC_STK_SR_Fields
-

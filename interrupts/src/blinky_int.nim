@@ -71,9 +71,17 @@ proc dispatchInterrupt(mcause: uint32) {.exportc.} =
     # but this will not work because the flag is not cleared
     unhandled_handler()
 
+proc interrupt_handler(): void {.importc.}
+
 block main:
     port_init()
     setup_timer()
+
+    # VTF can handle upto 4 interrupts.
+    PFIC.VTFIDR.write(VTFID0 = uint8(irqTIM1_UP))
+    let handlerAddr = cast[uint32](cast[pointer](interrupt_handler))
+    PFIC.VTFADDRR0.write(ADDR0 = handlerAddr, VTF0EN = true)
+
     enable_interrupt()
 
     while true:
