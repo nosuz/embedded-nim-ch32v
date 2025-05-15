@@ -54,8 +54,8 @@ proc timer_handler() =
     TIM1.INTFR.modifyIt:
         it.UIF = false
 
-const interruptHandlers = [
-    Interrupt(id: uint32(irqTIM1_UP), handler: timer_handler),
+const interruptHandlers = @[
+    Interrupt(id: irqTIM1_UP, handler: timer_handler),
 ]
 
 # this function name is fixed.
@@ -64,24 +64,18 @@ proc dispatchInterrupt(mcause: uint32) {.exportc.} =
     # expcted "andi a0, a0, 0xff". this code is same as "zext.b	a0,a0"
     let src_id = mcause and 0xff
     for handler in interruptHandlers:
-        if src_id == handler.id:
+        if src_id == uint32(handler.id):
             handler.handler()
             return
     # fallback
     # but this will not work because the flag is not cleared
     unhandled_handler()
 
-proc interrupt_handler(): void {.importc.}
-
 block main:
     port_init()
     setup_timer()
 
-    # VTF can handle upto 4 interrupts.
-    PFIC.VTFIDR.write(VTFID0 = uint8(irqTIM1_UP))
-    let handlerAddr = cast[uint32](cast[pointer](interrupt_handler))
-    PFIC.VTFADDRR0.write(ADDR0 = handlerAddr, VTF0EN = true)
-
+    setVTF(interruptHandlers)
     enable_interrupt()
 
     while true:

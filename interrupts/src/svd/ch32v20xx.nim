@@ -53600,7 +53600,6 @@ proc write*(reg: PFIC_VTFADDRR0_Type, val: PFIC_VTFADDRR0_Fields) {.inline.} =
 proc write*(reg: PFIC_VTFADDRR0_Type, VTF0EN: bool = false, ADDR0: uint32 = 0) =
   var x: uint32
   x.setMask((VTF0EN.uint32 shl 0).masked(0 .. 0))
-  # x.setMask((ADDR0 shl 1).masked(1 .. 31))
   x.setMask(ADDR0.masked(1 .. 31))
   reg.write x.PFIC_VTFADDRR0_Fields
 
@@ -53622,7 +53621,7 @@ proc write*(reg: PFIC_VTFADDRR1_Type, val: PFIC_VTFADDRR1_Fields) {.inline.} =
 proc write*(reg: PFIC_VTFADDRR1_Type, VTF1EN: bool = false, ADDR1: uint32 = 0) =
   var x: uint32
   x.setMask((VTF1EN.uint32 shl 0).masked(0 .. 0))
-  x.setMask((ADDR1 shl 1).masked(1 .. 31))
+  x.setMask(ADDR1.masked(1 .. 31))
   reg.write x.PFIC_VTFADDRR1_Fields
 
 template modifyIt*(reg: PFIC_VTFADDRR1_Type, op: untyped): untyped =
@@ -53643,7 +53642,7 @@ proc write*(reg: PFIC_VTFADDRR2_Type, val: PFIC_VTFADDRR2_Fields) {.inline.} =
 proc write*(reg: PFIC_VTFADDRR2_Type, VTF2EN: bool = false, ADDR2: uint32 = 0) =
   var x: uint32
   x.setMask((VTF2EN.uint32 shl 0).masked(0 .. 0))
-  x.setMask((ADDR2 shl 1).masked(1 .. 31))
+  x.setMask(ADDR2.masked(1 .. 31))
   reg.write x.PFIC_VTFADDRR2_Fields
 
 template modifyIt*(reg: PFIC_VTFADDRR2_Type, op: untyped): untyped =
@@ -53664,7 +53663,7 @@ proc write*(reg: PFIC_VTFADDRR3_Type, val: PFIC_VTFADDRR3_Fields) {.inline.} =
 proc write*(reg: PFIC_VTFADDRR3_Type, VTF3EN: bool = false, ADDR3: uint32 = 0) =
   var x: uint32
   x.setMask((VTF3EN.uint32 shl 0).masked(0 .. 0))
-  x.setMask((ADDR3 shl 1).masked(1 .. 31))
+  x.setMask(ADDR3.masked(1 .. 31))
   reg.write x.PFIC_VTFADDRR3_Fields
 
 template modifyIt*(reg: PFIC_VTFADDRR3_Type, op: untyped): untyped =
