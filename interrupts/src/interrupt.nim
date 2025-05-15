@@ -1,4 +1,4 @@
-import svd/ch32v20xx
+import ../../svd/ch32v20xx
 
 type
     Interrupt* = object

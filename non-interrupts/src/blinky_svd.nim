@@ -1,7 +1,7 @@
 {.compile: "start.S"}
 
 # import svd file
-import svd/ch32v20xx
+import ../../svd/ch32v20xx
 
 proc port_init() =
     # Enable PA clock
