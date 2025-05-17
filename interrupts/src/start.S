@@ -24,11 +24,14 @@ _start:
     // ra, t0, t1, t2, t3, t4, t5, t6, a0, a1, a2, a3, a4, a5, a6, a7
     csrsi 0x804, 0b0111
 
-    // set interrupts trap vec.
-    //la      t0, interrupt_handler
-    //csrw    mtvec, t0
+#ifdef USE_VTF
     // for VTF, both 0b01 and 0b11 works
     csrsi mtvec, 0b01
+#else
+    // set interrupts trap vec.
+    la      t0, interrupt_handler
+    csrw    mtvec, t0
+#endif
 
 copy_data_section:
     // copy data section to RAM
@@ -73,7 +76,7 @@ dispatchInterrupt:
 unhandled_handler:
     ret
 
-//.section .handlers, "ax"
+.section .handlers, "ax"
 .global interrupt_handler
 .type interrupt_handler, @function
 interrupt_handler:

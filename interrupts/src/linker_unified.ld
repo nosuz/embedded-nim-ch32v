@@ -35,10 +35,9 @@ SECTIONS
 
     *(.text .text.*);
 
-    /* MTVEC
+    /* MTVEC */
     . = ALIGN(1024);
     *(.handlers .handlers.*);
-    */
   } > REGION_TEXT
 
   .rodata : ALIGN(4)
